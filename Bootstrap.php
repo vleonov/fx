@@ -1,9 +1,5 @@
 <?php
 
-define('PROJECT_DOMAIN', 'miphoto');
-define('PROJECT_HOST', 'http://' . PROJECT_DOMAIN);
-define('DOMAIN', 1);
-
 class Bootstrap
 {
     /**

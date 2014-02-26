@@ -102,7 +102,7 @@ class Request
         } elseif (!empty($_SERVER['HTTP_REFERER'])) {
             return $_SERVER['HTTP_REFERER'];
         } else {
-            return PROJECT_HOST;
+            return '/';
         }
     }
 }
