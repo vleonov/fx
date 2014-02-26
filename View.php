@@ -1,7 +1,5 @@
 <?php
 
-require_once(ROOT_DIR . '/lib/External/Smarty/Smarty.class.php');
-
 class View extends Smarty
 {
 
