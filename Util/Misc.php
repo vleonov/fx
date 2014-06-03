@@ -18,4 +18,26 @@ class U_Misc
 
         return true;
     }
+
+    public static function rddir($dirname, $parentdir = null)
+    {
+        $result = array();
+        $dd = opendir($dirname);
+
+        while ($file = readdir($dd)) {
+            if ($file == '.' || $file == '..') {
+                continue;
+            }
+            if (is_dir($dirname . '/' . $file)) {
+                $result = array_merge(
+                    $result,
+                    self::rddir($dirname . '/' . $file, ($parentdir ? $parentdir . '/' : '') . $file)
+                );
+            } else {
+                $result[] = ($parentdir ? $parentdir . '/' : '') . $file;
+            }
+        }
+
+        return $result;
+    }
 }

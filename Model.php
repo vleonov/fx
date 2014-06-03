@@ -2,6 +2,7 @@
 
 abstract class Model {
 
+    protected $_idIsInt = true;
     protected $_id;
     protected $_data = array();
 
@@ -54,12 +55,12 @@ abstract class Model {
                 $values[] = $k . '=' . $this->_oDb->castValue($v);
             }
 
-            $sql = 'UPDATE %s SET %s WHERE id=%d';
+            $sql = 'UPDATE %s SET %s WHERE id=%s';
             $sql = sprintf(
                 $sql,
                 $this->_tblName,
                 implode(', ', $values),
-                $this->_id
+                $this->_idIsInt ? intval($this->_id) : $this->_oDb->castValue(strval($this->_id))
             );
         } else {
             $columns = $values = array();
@@ -102,11 +103,11 @@ abstract class Model {
 
     protected function _getById($id)
     {
-        $sql = 'SELECT * FROM %s WHERE id=%d';
+        $sql = 'SELECT * FROM %s WHERE id=%s';
         $sql = sprintf(
             $sql,
             $this->_tblName,
-            $id
+            $this->_idIsInt ? intval($id) : $this->_oDb->castValue(strval($id))
         );
 
         $res = $this->_oDb->query($sql);

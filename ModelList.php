@@ -84,5 +84,8 @@ abstract class ModelList implements Iterator {
         return isset($this->_data[$this->_cursor]);
     }
 
-
+    final public function sizeof()
+    {
+        return sizeof($this->_data);
+    }
 }

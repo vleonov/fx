@@ -132,6 +132,16 @@ class Response
         if ($this->_template) {
             $oView = new View();
             try {
+
+                $host = U_Url::host();
+                $base = Config()->base;
+                $baseHref = '//' . $host . U_Misc::is($base[$host], '') . '/';
+
+                $this->_data += array(
+                    'BaseHref' => $baseHref,
+                    'GlobalUri' => U_Misc::is($_SERVER['REQUEST_URI']),
+                );
+
                 $content = $oView->assign($this->_data)->fetch($this->_template);
             } catch (Exception $e) {
                 $content = $e->getMessage();
