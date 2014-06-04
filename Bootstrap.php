@@ -13,10 +13,10 @@ class Bootstrap
         // автозагрузчик классов
         spl_autoload_register('Bootstrap::autoload');
 
-        require_once __DIR__ . '/Request.php';
-        require_once __DIR__ . '/Response.php';
-        require_once __DIR__ . '/Session.php';
-        require_once __DIR__ . '/Config.php';
+        require_once dirname(__FILE__) . '/Request.php';
+        require_once dirname(__FILE__) . '/Response.php';
+        require_once dirname(__FILE__) . '/Session.php';
+        require_once dirname(__FILE__) . '/Config.php';
 
         self::$config = Config::getInstance($configFilename);
 
@@ -41,7 +41,7 @@ class Bootstrap
         }
 
         $fileName = self::$config->dir['root'] . '/lib/' . str_replace('_', '/', $className) . '.php';
-        $fxFileName = __DIR__ . '/' . str_replace('_', '/', $className) . '.php';
+        $fxFileName = dirname(__FILE__) . '/' . str_replace('_', '/', $className) . '.php';
 
         if (file_exists($fileName)) {
             require_once $fileName;
