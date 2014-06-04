@@ -72,7 +72,7 @@ class Response
 
     public function redirect($url)
     {
-	$host = parse_url($url, PHP_URL_HOST);
+	    $host = parse_url($url, PHP_URL_HOST);
         $url = $host ? $url : 'http:' . U_Url::base() . $url;
         $this->_headers['Location'] = $url;
 
