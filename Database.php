@@ -2,6 +2,13 @@
 
 class Database {
 
+    const TYPE_INTEGER = 'integer';
+    const TYPE_DOUBLE = 'double';
+    const TYPE_BOOLEAN = 'boolean';
+    const TYPE_STRING = 'string';
+    const TYPE_JSON = 'json';
+    const TYPE_ARRAY = 'array';
+
     /**
      * @var PDO
      */
@@ -75,23 +82,30 @@ class Database {
         return $this->_connection->lastInsertId();
     }
 
-    public function castValue($v)
+    public function castValue($v, $type = null)
     {
 
         if (is_null($v)) {
             $v = 'NULL';
-        } elseif (is_array($v)) {
-            $v = $this->arrayEncode($v);
         } else {
-            switch (gettype($v)) {
-                case 'integer':
-                case 'double':
+            switch ($type ? $type : gettype($v)) {
+                case self::TYPE_INTEGER:
+                    $v = intval($v);
                     break;
-                case 'boolean':
+                case self::TYPE_DOUBLE:
+                    $v = floatval($v);
+                    break;
+                case self::TYPE_BOOLEAN:
                     $v = $v ? 'TRUE' : 'FALSE';
                     break;
-                case 'string':
+                case self::TYPE_STRING:
                     $v = $this->_connection->quote($v);
+                    break;
+                case self::TYPE_JSON:
+                    $v = $this->_connection->quote(json_encode($v));
+                    break;
+                case self::TYPE_ARRAY:
+                    $v = "'," . implode(',', $arr) . ",'";
                     break;
             }
         }
@@ -99,13 +113,17 @@ class Database {
         return $v;
     }
 
-    public function listDecode($value)
+    public function parseValue($v, $type = null)
     {
-        return array_filter(explode(',', $value));
-    }
+        switch ($type) {
+            case self::TYPE_JSON:
+                $v = json_decode($v, true);
+                break;
+            case self::TYPE_ARRAY:
+                $v = array_filter(explode(',', $v));
+                break;
+        }
 
-    public function arrayEncode($arr)
-    {
-        return "'," . implode(',', $arr) . ",'";
+        return $v;
     }
 }

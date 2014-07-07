@@ -6,6 +6,7 @@ abstract class Model {
     protected $_id;
     protected $_data = array();
 
+    protected $_customTypes = array();
     protected $_tblName;
 
     /**
@@ -52,7 +53,7 @@ abstract class Model {
         if ($this->_id) {
             $values = array();
             foreach ($this->_data as $k=>$v) {
-                $values[] = $k . '=' . $this->_oDb->castValue($v);
+                $values[] = $k . '=' . $this->_oDb->castValue($v, U_Misc::is($this->_customTypes[$k]));
             }
 
             $sql = 'UPDATE %s SET %s WHERE id=%s';
@@ -66,7 +67,7 @@ abstract class Model {
             $columns = $values = array();
             foreach ($this->_data as $k=>$v) {
                 $columns[] = $k;
-                $values[] = $this->_oDb->castValue($v);
+                $values[] = $this->_oDb->castValue($v, U_Misc::is($this->_customTypes[$k]));
             }
 
             $sql = 'INSERT INTO %s (%s) VALUES (%s)';
@@ -90,6 +91,10 @@ abstract class Model {
         if (isset($data['id'])) {
             $this->_id = $data['id'];
             unset($data['id']);
+        }
+
+        foreach ($data as $k => $v) {
+            $data[$k] = $this->_oDb->parseValue($v, U_Misc::is($this->_customTypes[$k]));
         }
         $this->_data = $data;
 
