@@ -138,10 +138,10 @@ class U_Image
         switch ($info['mime']) {
             case 'image/jpeg':
             case 'image/jpg':
-                $res = imagejpeg($imageTo, $to, 80);
+                $res = imagejpeg($imageTo, $to, 100);
                 break;
             case 'image/png':
-                $res = imagepng($imageTo, $to, 80);
+                $res = imagepng($imageTo, $to, 100);
                 break;
             case 'image/gif':
                 $res = imagegif($imageTo, $to);
