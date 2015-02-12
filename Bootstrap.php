@@ -20,12 +20,14 @@ class Bootstrap
 
         self::$config = Config::getInstance($configFilename);
 
-        $oRouter = new Router();
+        if (PHP_SAPI != 'cli') {
+            $oRouter = new Router();
 
-        $callback = $oRouter->proceed();
-        $oResponse = $callback ? call_user_func($callback) : Response()->error404();
+            $callback = $oRouter->proceed();
+            $oResponse = $callback ? call_user_func($callback) : Response()->error404();
 
-        echo $oResponse;
+            echo $oResponse;
+        }
     }
 
     public static function autoload($className)

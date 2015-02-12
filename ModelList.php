@@ -35,12 +35,12 @@ abstract class ModelList implements Iterator {
             $conditions[] = $k . $v;
         }
 
-        $sql = 'SELECT * FROM %s WHERE %s ORDER BY %s LIMIT %d';
+        $sql = 'SELECT * FROM %s WHERE %s %s LIMIT %d';
         $sql = sprintf(
             $sql,
             $this->_tblName,
             implode(' AND ', $conditions),
-            implode(', ', $orders),
+            $orders ? 'ORDER BY ' . implode(', ', $orders) : '',
             $limit ? $limit : 1e3
         );
 

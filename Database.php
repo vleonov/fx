@@ -8,6 +8,7 @@ class Database {
     const TYPE_STRING = 'string';
     const TYPE_JSON = 'json';
     const TYPE_ARRAY = 'array';
+    const TYPE_TIMESTAMP = 'timestamp';
 
     /**
      * @var PDO
@@ -101,11 +102,14 @@ class Database {
                 case self::TYPE_STRING:
                     $v = $this->_connection->quote($v);
                     break;
+                case self::TYPE_TIMESTAMP:
+                    $v = $this->_connection->quote(date(DATE_W3C, $v));
+                    break;
                 case self::TYPE_JSON:
                     $v = $this->_connection->quote(json_encode($v));
                     break;
                 case self::TYPE_ARRAY:
-                    $v = "'," . implode(',', $arr) . ",'";
+                    $v = "'," . implode(',', $v) . ",'";
                     break;
             }
         }
@@ -116,6 +120,12 @@ class Database {
     public function parseValue($v, $type = null)
     {
         switch ($type) {
+            case self::TYPE_TIMESTAMP:
+                $v = strtotime($v);
+                break;
+            case self::TYPE_BOOLEAN:
+                $v = (bool) $v;
+                break;
             case self::TYPE_JSON:
                 $v = json_decode($v, true);
                 break;
