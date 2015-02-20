@@ -13,6 +13,7 @@ class View extends Smarty
         $this->compile_check = Config()->view['compileCheck'];
 
         $this->registerPlugin("modifier", "size", array($this, 'modifierSize'));
+        $this->registerPlugin("modifier", "date", array($this, 'modifierDate'));
     }
 
     public function modifierSize($size)
@@ -35,5 +36,25 @@ class View extends Smarty
         }
 
         return $size . $measure;
+    }
+
+    public function modifierDate($timestamp, $formatShort = 'H:i', $formatFull = 'd.m.Y H:i')
+    {
+        static $today, $yesterday;
+
+        if (!$today) {
+            $today = strtotime(date('Y-m-d 00:00:00'));
+            $yesterday = strtotime(date('Y-m-d 00:00:00') . ' -1day');
+        }
+
+        if ($timestamp > $today) {
+            $result = 'Сегодня ' . date($formatShort, $timestamp);
+        } elseif ($timestamp > $yesterday) {
+            $result = 'Вчера ' . date($formatShort, $timestamp);
+        } else {
+            $result = date($formatFull, $timestamp);
+        }
+
+        return $result;
     }
 }

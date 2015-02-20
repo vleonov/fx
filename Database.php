@@ -109,7 +109,7 @@ class Database {
                     $v = $this->_connection->quote(json_encode($v));
                     break;
                 case self::TYPE_ARRAY:
-                    $v = "'," . implode(',', $v) . ",'";
+                    $v = $this->_connection->quote("," . implode(',', $v) . ",");
                     break;
             }
         }
